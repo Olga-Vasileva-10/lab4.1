@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         Question("Флаг Италии имеет красный, белый и желтый цвета?", false),
         Question("Солнце — это звезда.", true),
         Question("Гарри Поттер — это книга о супергерое?", false)
-        // Добавьте больше вопросов по мере необходимости
     )
 
     private val TOTAL_QUESTIONS = questionBank.size
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             updateQuestion() // Обновление вопроса
         }
 
-        updateQuestion() // Обновляем вопрос при создании активности
+        updateQuestion()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -75,9 +74,11 @@ class MainActivity : AppCompatActivity() {
             correctAnswersCount++
         }
 
+        // Скрываем кнопки "True" и "False"
         trueButton.visibility = View.INVISIBLE
         falseButton.visibility = View.INVISIBLE
 
+        // Скрываем кнопку "Next", если это последний вопрос
         if (currentQuestionIndex == TOTAL_QUESTIONS - 1) {
             showResult()
             nextButton.visibility = View.INVISIBLE
@@ -98,6 +99,10 @@ class MainActivity : AppCompatActivity() {
         if (currentQuestionIndex < TOTAL_QUESTIONS) {
             val question = questionBank[currentQuestionIndex]
             questionTextView.text = question.text // Устанавливаем текст вопроса в TextView
+
+            // Показываем кнопки "True" и "False" при обновлении вопроса
+            trueButton.visibility = View.VISIBLE
+            falseButton.visibility = View.VISIBLE
         }
     }
 }

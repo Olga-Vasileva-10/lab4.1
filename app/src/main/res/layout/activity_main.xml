@@ -12,21 +12,23 @@
         android:id="@+id/Next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="36dp"
         android:text="Next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/True" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp" />
+        />
 
     <TextView
         android:id="@+id/toolbar_title"
@@ -36,7 +38,7 @@
         android:text="GeoQuiz"
         android:textColor="@android:color/white"
         android:textSize="30sp"
-        tools:layout_editor_absoluteX="10dp"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="10dp" />
 
     <TextView
@@ -54,8 +56,8 @@
         android:id="@+id/False"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="64dp"
         android:text="False"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -64,8 +66,8 @@
         android:id="@+id/True"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="36dp"
         android:text="True"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
