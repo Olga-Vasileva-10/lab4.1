@@ -2,6 +2,7 @@ package com.example.lab4
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,11 +14,10 @@ data class Question(val text: String, val answer: Boolean)
 
 class MainActivity : AppCompatActivity() {
     private val questionBank = listOf(
-        Question("Кошки мяукают.", true),
-        Question("Земля плоская.", false),
+        Question("Лондон — столица Великобритании?", true),
+        Question("Флаг Италии имеет красный, белый и желтый цвета?", false),
         Question("Солнце — это звезда.", true),
-        Question("Собака — это млекопитающее.", true),
-        Question("Птицы не могут летать.", false)
+        Question("Гарри Поттер — это книга о супергерое?", false)
         // Добавьте больше вопросов по мере необходимости
     )
 
@@ -27,15 +27,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
+    private lateinit var questionTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        // Инициализация кнопок и TextView
         trueButton = findViewById(R.id.True)
         falseButton = findViewById(R.id.False)
         nextButton = findViewById(R.id.Next)
+        questionTextView = findViewById(R.id.textView)
 
         if (savedInstanceState != null) {
             currentQuestionIndex = savedInstanceState.getInt("currentQuestionIndex", 0)
@@ -50,6 +53,12 @@ class MainActivity : AppCompatActivity() {
 
         trueButton.setOnClickListener { onAnswerSelected(true) }
         falseButton.setOnClickListener { onAnswerSelected(false) }
+
+        // Обработчик для кнопки "Next"
+        nextButton.setOnClickListener {
+            currentQuestionIndex++
+            updateQuestion() // Обновление вопроса
+        }
 
         updateQuestion() // Обновляем вопрос при создании активности
     }
@@ -74,10 +83,6 @@ class MainActivity : AppCompatActivity() {
             nextButton.visibility = View.INVISIBLE
         } else {
             nextButton.visibility = View.VISIBLE
-            nextButton.setOnClickListener {
-                currentQuestionIndex++
-                updateQuestion()
-            }
         }
     }
 
@@ -92,8 +97,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         if (currentQuestionIndex < TOTAL_QUESTIONS) {
             val question = questionBank[currentQuestionIndex]
-            // Обновите UI, чтобы отобразить вопрос question.text
-            // Например, установить текст в TextView
+            questionTextView.text = question.text // Устанавливаем текст вопроса в TextView
         }
     }
 }
