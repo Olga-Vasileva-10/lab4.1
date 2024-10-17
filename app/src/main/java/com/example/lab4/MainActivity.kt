@@ -1,31 +1,45 @@
 package com.example.lab4
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.View
-import android.widget.Button // Импортируем класс Button
+
+data class Question(val text: String, val answer: Boolean)
 
 class MainActivity : AppCompatActivity() {
-    private var currentQuestionIndex: Int = 0 // Индекс текущего вопроса
-    private lateinit var trueButton: Button // Кнопка "True"
-    private lateinit var falseButton: Button // Кнопка "False"
-    private lateinit var nextButton: Button // Кнопка "Next"
+    private val questionBank = listOf(
+        Question("Кошки мяукают.", true),
+        Question("Земля плоская.", false),
+        Question("Солнце — это звезда.", true),
+        Question("Собака — это млекопитающее.", true),
+        Question("Птицы не могут летать.", false)
+        // Добавьте больше вопросов по мере необходимости
+    )
+
+    private val TOTAL_QUESTIONS = questionBank.size
+    private var currentQuestionIndex: Int = 0
+    private var correctAnswersCount: Int = 0
+    private lateinit var trueButton: Button
+    private lateinit var falseButton: Button
+    private lateinit var nextButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         trueButton = findViewById(R.id.True)
         falseButton = findViewById(R.id.False)
         nextButton = findViewById(R.id.Next)
 
-        // Восстановление состояния, если доступен savedInstanceState
         if (savedInstanceState != null) {
             currentQuestionIndex = savedInstanceState.getInt("currentQuestionIndex", 0)
-            // Здесь восстановите вопрос, используя currentQuestionIndex
+            correctAnswersCount = savedInstanceState.getInt("correctAnswersCount", 0)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -34,25 +48,52 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Установка обработчиков событий для кнопок
         trueButton.setOnClickListener { onAnswerSelected(true) }
         falseButton.setOnClickListener { onAnswerSelected(false) }
+
+        updateQuestion() // Обновляем вопрос при создании активности
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Сохранение текущего вопроса
         outState.putInt("currentQuestionIndex", currentQuestionIndex)
+        outState.putInt("correctAnswersCount", correctAnswersCount)
     }
 
     private fun onAnswerSelected(answer: Boolean) {
-        // Скрываем кнопки "True" и "False"
+        val isCorrect = checkAnswer(answer)
+        if (isCorrect) {
+            correctAnswersCount++
+        }
+
         trueButton.visibility = View.INVISIBLE
         falseButton.visibility = View.INVISIBLE
 
+        if (currentQuestionIndex == TOTAL_QUESTIONS - 1) {
+            showResult()
+            nextButton.visibility = View.INVISIBLE
+        } else {
+            nextButton.visibility = View.VISIBLE
+            nextButton.setOnClickListener {
+                currentQuestionIndex++
+                updateQuestion()
+            }
+        }
     }
 
-    companion object {
-        private const val TOTAL_QUESTIONS = 10 // Общее количество вопросов
+    private fun showResult() {
+        Toast.makeText(this, "Правильные ответы: $correctAnswersCount из $TOTAL_QUESTIONS", Toast.LENGTH_LONG).show()
+    }
+
+    private fun checkAnswer(answer: Boolean): Boolean {
+        return questionBank[currentQuestionIndex].answer == answer
+    }
+
+    private fun updateQuestion() {
+        if (currentQuestionIndex < TOTAL_QUESTIONS) {
+            val question = questionBank[currentQuestionIndex]
+            // Обновите UI, чтобы отобразить вопрос question.text
+            // Например, установить текст в TextView
+        }
     }
 }
