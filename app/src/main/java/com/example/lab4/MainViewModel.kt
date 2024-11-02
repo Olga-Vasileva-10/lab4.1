@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-data class Question(val text: String, val answer: Boolean)
+data class Question(val text: String, val answer: Boolean, val Cheat: String) // Добавляем подсказку
 
 class MainViewModel : ViewModel() {
     private val questionBank = listOf(
-        Question("Лондон — столица Великобритании?", true),
-        Question("Флаг Италии имеет красный, белый и желтый цвета?", false),
-        Question("Солнце — это звезда.", true),
-        Question("Гарри Поттер — это книга о супергерое?", false)
+        Question("Лондон — столица Великобритании?", true, "Это столица Англии."),
+        Question("Флаг Италии имеет красный, белый и желтый цвета?", false, "В флаге Италии есть только три цвета."),
+        Question("Солнце — это звезда.", true, "Это не планета, а звезда."),
+        Question("Гарри Поттер — это книга о супергерое?", false, "Это книга о магии и приключениях.")
     )
 
     private val _currentQuestionIndex = MutableLiveData(0)
@@ -21,7 +21,9 @@ class MainViewModel : ViewModel() {
     val correctAnswersCount: LiveData<Int> get() = _correctAnswersCount
 
     fun nextQuestion() {
-        _currentQuestionIndex.value = (_currentQuestionIndex.value ?: 0) + 1
+        if (_currentQuestionIndex.value != null && _currentQuestionIndex.value!! < questionBank.size - 1) {
+            _currentQuestionIndex.value = _currentQuestionIndex.value!! + 1
+        }
     }
 
     fun checkAnswer(answer: Boolean): Boolean {
@@ -34,4 +36,5 @@ class MainViewModel : ViewModel() {
 
     fun getTotalQuestions() = questionBank.size
     fun getCurrentQuestion() = questionBank[_currentQuestionIndex.value ?: 0].text
+    fun getCurrentCheat() = questionBank[_currentQuestionIndex.value ?: 0].Cheat // Новый метод для получения подсказки
 }

@@ -17,12 +17,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
+    private lateinit var hintButton: Button // Новая кнопка подсказки
     private lateinit var questionTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main) // Установите основной макет без ViewBinding
+        setContentView(R.layout.activity_main) // Установите основной макет
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         trueButton = findViewById(R.id.True)
         falseButton = findViewById(R.id.False)
         nextButton = findViewById(R.id.Next)
+        hintButton = findViewById(R.id.Cheat) // Инициализация кнопки подсказки
         questionTextView = findViewById(R.id.textView)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.nextQuestion()
             updateQuestion()
         }
+
+        hintButton.setOnClickListener { showCheat() } // Добавлен обработчик для подсказки
 
         viewModel.currentQuestionIndex.observe(this) {
             updateQuestion()
@@ -78,5 +82,11 @@ class MainActivity : AppCompatActivity() {
         questionTextView.text = viewModel.getCurrentQuestion()
         trueButton.visibility = View.VISIBLE
         falseButton.visibility = View.VISIBLE
+    }
+
+    // Метод для отображения подсказки
+    private fun showCheat() {
+        val hint = viewModel.getCurrentCheat() // Метод получения подсказки
+        Toast.makeText(this, hint, Toast.LENGTH_LONG).show()
     }
 }

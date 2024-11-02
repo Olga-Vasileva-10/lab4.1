@@ -69,4 +69,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/True" />
 
+    <Button
+        android:id="@+id/Cheat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:text="Cheat"
+        app:layout_constraintEnd_toStartOf="@+id/Next"
+        app:layout_constraintTop_toBottomOf="@+id/False" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
