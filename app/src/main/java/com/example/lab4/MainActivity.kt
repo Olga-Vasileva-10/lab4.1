@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity() {
 
     // Метод для отображения подсказки
     private fun showCheat() {
-
             if (viewModel.useCheat()) {
                 val hint = viewModel.getCurrentCheat()
                 Toast.makeText(this, hint, Toast.LENGTH_LONG).show()
