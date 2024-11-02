@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 data class Question(val text: String, val answer: Boolean, val Cheat: String) // Добавляем подсказку
 
 class MainViewModel : ViewModel() {
+    private val remainingCheat = MutableLiveData(3)
+    val remainingCheatt: LiveData<Int> get() = remainingCheat
     private val questionBank = listOf(
-        Question("Лондон — столица Великобритании?", true, "Это столица Англии."),
-        Question("Флаг Италии имеет красный, белый и желтый цвета?", false, "В флаге Италии есть только три цвета."),
-        Question("Солнце — это звезда.", true, "Это не планета, а звезда."),
-        Question("Гарри Поттер — это книга о супергерое?", false, "Это книга о магии и приключениях.")
+        Question("Лондон — столица Великобритании?", true, "True"),
+        Question("Флаг Италии имеет красный, белый и желтый цвета?", false, "False"),
+        Question("Солнце — это звезда.", true, "True"),
+        Question("Гарри Поттер — это книга о супергерое?", false, "False")
     )
 
     private val _currentQuestionIndex = MutableLiveData(0)
@@ -33,7 +35,14 @@ class MainViewModel : ViewModel() {
     fun increaseCorrectAnswersCount() {
         _correctAnswersCount.value = (_correctAnswersCount.value ?: 0) + 1
     }
-
+    fun useCheat(): Boolean {
+        return if (remainingCheat.value ?: 0 > 0) {
+            remainingCheat.value = (remainingCheat.value ?: 0) - 1
+            true
+        } else {
+            false
+        }
+    }
     fun getTotalQuestions() = questionBank.size
     fun getCurrentQuestion() = questionBank[_currentQuestionIndex.value ?: 0].text
     fun getCurrentCheat() = questionBank[_currentQuestionIndex.value ?: 0].Cheat // Новый метод для получения подсказки
