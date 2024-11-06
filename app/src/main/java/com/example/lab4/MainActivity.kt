@@ -1,5 +1,6 @@
 package com.example.lab4
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -17,21 +18,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
-    private lateinit var hintButton: Button // Новая кнопка подсказки
+    private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main) // Установите основной макет
+        setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        // Инициализация кнопок и TextView с использованием findViewById
         trueButton = findViewById(R.id.True)
         falseButton = findViewById(R.id.False)
         nextButton = findViewById(R.id.Next)
-        hintButton = findViewById(R.id.Cheat) // Инициализация кнопки подсказки
+        cheatButton = findViewById(R.id.Cheat)
         questionTextView = findViewById(R.id.textView)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
-        hintButton.setOnClickListener { showCheat() } // Добавлен обработчик для подсказки
+        cheatButton.setOnClickListener { startCheatActivity() }
 
         viewModel.currentQuestionIndex.observe(this) {
             updateQuestion()
@@ -84,14 +84,15 @@ class MainActivity : AppCompatActivity() {
         falseButton.visibility = View.VISIBLE
     }
 
-    // Метод для отображения подсказки
-    private fun showCheat() {
-            if (viewModel.useCheat()) {
-                val hint = viewModel.getCurrentCheat()
-                Toast.makeText(this, hint, Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Подсказки закончились!", Toast.LENGTH_LONG).show()
+    private fun startCheatActivity() {
+        if (viewModel.useCheat()) {
+            val cheatText = viewModel.getCurrentCheat()
+            val intent = Intent(this, CheatActivity::class.java).apply {
+                putExtra(CheatActivity.EXTRA_CHEAT_TEXT, cheatText)
             }
-
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Подсказки закончились!", Toast.LENGTH_LONG).show()
+        }
     }
 }
